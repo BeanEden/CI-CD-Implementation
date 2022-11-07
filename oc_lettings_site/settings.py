@@ -26,6 +26,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'lettings_app',
+    'profiles_app',
+    'oc_lettings_app'
 ]
 
 MIDDLEWARE = [
