@@ -24,8 +24,8 @@ workflows:
           requires:
             - build-and-test
               filters:
-              branches:
-                only: main
+                branches:
+                  only: main
 
 
 jobs:
