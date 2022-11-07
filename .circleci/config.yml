@@ -14,18 +14,17 @@ executors:
 workflows:
   commit-main-branch:
     jobs:
-      - build-and-test
-        requires:
+      - build-and-test:
           filters:
             branches:
               only:
                 - main
       - deploy-docker:
           requires:
-            -build-and-test
+            - build-and-test
       - deploy-heroku:
           requires:
-            -deploy-docker
+            - deploy-docker
 
 
   compilation-and-tests:
@@ -37,10 +36,10 @@ workflows:
       - build-and-test
       - deploy-docker:
           requires:
-            -build-and-test
-      -deploy_heroku:
+            - build-and-test
+      - deploy_heroku:
           requires:
-            -deploy-docker
+            - deploy-docker
 #            filters
 
 
