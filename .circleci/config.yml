@@ -12,21 +12,47 @@ executors:
     working_directory: /tmp/workspace
 
 workflows:
-  main:
+  commit-main-branch:
     jobs:
       - build-and-test
-      - deploy-docker
+        requires:
+          filters:
+            branches:
+              only:
+                - main
+      - deploy-docker:
+          requires:
+            -build-and-test
+      - deploy-heroku:
+          requires:
+            -deploy-docker
+
+
+  compilation-and-tests:
+    jobs:
+      - build-and-test
+
+  docker-deployment:
+    jobs:
+      - build-and-test
+      - deploy-docker:
+          requires:
+            -build-and-test
+          filters
+
 
   heroku_deploy:
     jobs:
       - build-and-test
-      - heroku/deploy-via-git:
-          requires:
-            - build-and-test
-          filters:
-            branches:
-              only:
-                    main
+      - deploy-docker
+      - deploy-heroku
+#      - heroku/deploy-via-git:
+#          requires:
+#            - build-and-test
+#          filters:
+#            branches:
+#              only:
+#                    main
 
 
 jobs:
@@ -56,10 +82,6 @@ jobs:
     machine: true
     steps:
       - checkout
-#      - run:
-#          name: Connect to docker
-#          command :
-#            docker login -u $DOCKERHUB_LOGIN -p $DOCKERHUB_PASSWORD
 
       - run:
           name: Build docker image
@@ -74,3 +96,16 @@ jobs:
             docker push $DOCKERHUB_LOGIN/oc-lettings:$CIRCLE_SHA1
             docker push $DOCKERHUB_LOGIN/oc-lettings:lastest
 
+    deploy-heroku:
+      executor: heroku/default
+      steps:
+        - checkout
+        - heroku/install
+        - run: heroku maintenance:on --app $HEROKU_APP_NAME
+        - run: heroku config:set BUILD_NUMBER=$CIRCLE_BUILD_NUM -a $HEROKU_APP_NAME
+#        - run: heroku config:set SECRET_KEY=$SECRET_KEY -a $HEROKU_APP_NAME
+#        - run: heroku config:set SENTRY_DSN=$SENTRY_DSN -a $HEROKU_APP_NAME
+        - run: heroku stack:set heroku-20 -a $HEROKU_APP_NAME
+        - run: heroku maintenance:off --app $HEROKU_APP_NAME
+        - heroku/deploy-via-git:
+            force: true
