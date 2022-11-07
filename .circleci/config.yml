@@ -1,0 +1,54 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@2.1.1
+  docker: circleci/docker@1.4.0
+
+
+executors:
+  my-machine:
+    machine: true
+    working_directory: /tmp/workspace
+
+workflows:
+  main:
+    jobs:
+      - build-and-test
+      - deploy-docker
+
+jobs:
+  build-and-test:
+    docker:
+      - image: cimg/python:3.9.13
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: pip
+      - run:
+          name: Install Dependencies
+          command: |
+            pip install --upgrade pip
+            pip install -r requirements.txt
+      - run:
+          name: Run tests with pytest
+          command: pytest
+      - run:
+          name: Run linting with flake8 (PEP8)
+          command: flake8
+      - store_test_results:
+          path: tests
+
+
+  deploy-docker:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Connect to docker
+          command :
+            docker login -u $DOCKERHUB_LOGIN -p $DOCKERHUB_PASSWORD
+
+      - run:
+          name: Connect to docker
+          command:
+            docker run --pull always -p 8000:8000 --name P13_3 beaneden/oc-letting-docker-build:$CIRCLE_CI_HASH
