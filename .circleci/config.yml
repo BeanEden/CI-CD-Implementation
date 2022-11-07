@@ -43,12 +43,20 @@ jobs:
     machine: true
     steps:
       - checkout
-      - run:
-          name: Connect to docker
-          command :
-            docker login -u $DOCKERHUB_LOGIN -p $DOCKERHUB_PASSWORD
+#      - run:
+#          name: Connect to docker
+#          command :
+#            docker login -u $DOCKERHUB_LOGIN -p $DOCKERHUB_PASSWORD
 
       - run:
-          name: Connect to docker
+          name: Build docker image
           command:
-            docker run --pull always -p 8000:8000 --name P13_3 beaneden/oc-letting-docker-build:$CIRCLE_CI_HASH
+            docker build -t $DOCKERHUB_LOGIN/oc-lettings:$CIRCLE_SHA1 .
+
+      - run:
+          name: Connect and push Docker Image
+          command: |
+            echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_LOGIN --password-stdin
+            docker tag $DOCKERHUB_LOGIN/oc-lettings:$CIRCLE_SHA1 $DOCKERHUB_LOGIN/oc-lettings:lastest
+            docker push $DOCKERHUB_LOGIN/oc-lettings:$CIRCLE_SHA1
+            docker push $DOCKERHUB_LOGIN/oc-lettings:lastest
