@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   python: circleci/python@2.1.1
   docker: circleci/docker@1.4.0
-  heroku: circleci/heroku@7.65
+  heroku: circleci/heroku@2.0.0
 
 
 executors:
@@ -23,9 +23,10 @@ workflows:
       - heroku/deploy-via-git:
           requires:
             - build-and-test
-              filters:
-                branches:
-                  only: main
+          filters:
+            branches:
+              only:
+                    main
 
 
 jobs:
