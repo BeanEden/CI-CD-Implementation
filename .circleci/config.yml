@@ -12,7 +12,7 @@ executors:
     working_directory: /tmp/workspace
 
 workflows:
-  commit-main-branch:
+  prod-commit-to-main-branch:
     jobs:
       - build-and-test:
           filters:
@@ -31,37 +31,40 @@ workflows:
                 main
 
 
-  compilation-and-tests:
+  dev-other-branches-compilation-and-tests:
     jobs:
       - build-and-test
+        filters:
+          branches:
+            ignore:
+              main
 
-  docker-deployment:
-    jobs:
-      - build-and-test
-      - deploy-docker:
-          requires:
-            - build-and-test
-      - heroku/deploy-via-git:
-          requires:
-            - build-and-test
-          filters:
-            branches:
-              only:
-                main
-
-
-  heroku_deploy:
-    jobs:
-      - build-and-test
-      - deploy-docker
-#      - deploy-heroku
-      - heroku/deploy-via-git:
-          requires:
-            - build-and-test
-          filters:
-            branches:
-              only:
-                    main
+#  docker-deployment:
+#    jobs:
+#      - build-and-test
+#      - deploy-docker:
+#          requires:
+#            - build-and-test
+#      - heroku/deploy-via-git:
+#          requires:
+#            - build-and-test
+#          filters:
+#            branches:
+#              only:
+#                main
+#
+#
+#  heroku_deploy:
+#    jobs:
+#      - build-and-test
+#      - deploy-docker
+#      - heroku/deploy-via-git:
+#          requires:
+#            - build-and-test
+#          filters:
+#            branches:
+#              only:
+#                    main
 
 
 jobs:
