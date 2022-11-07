@@ -38,7 +38,10 @@ workflows:
       - deploy-docker:
           requires:
             -build-and-test
-          filters
+      -deploy_heroku:
+          requires:
+            -deploy-docker
+#            filters
 
 
   heroku_deploy:
