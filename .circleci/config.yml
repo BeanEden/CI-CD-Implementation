@@ -23,6 +23,7 @@ workflows:
           requires:
             - build-and-test
       - heroku/deploy-via-git:
+          executor: heroku/default
           requires:
             - build-and-test
           filters:
