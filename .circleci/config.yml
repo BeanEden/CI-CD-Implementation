@@ -23,10 +23,9 @@ workflows:
           requires:
             - build-and-test
 
-#      - heroku/deploy-via-git:
       - deploy-heroku:
           requires:
-            - build-and-test
+            - deploy-docker
           filters:
             branches:
               only:
@@ -40,33 +39,6 @@ workflows:
             branches:
               ignore:
                 main
-
-#  docker-deployment:
-#    jobs:
-#      - build-and-test
-#      - deploy-docker:
-#          requires:
-#            - build-and-test
-#      - heroku/deploy-via-git:
-#          requires:
-#            - build-and-test
-#          filters:
-#            branches:
-#              only:
-#                main
-#
-#
-#  heroku_deploy:
-#    jobs:
-#      - build-and-test
-#      - deploy-docker
-#      - heroku/deploy-via-git:
-#          requires:
-#            - build-and-test
-#          filters:
-#            branches:
-#              only:
-#                    main
 
 
 jobs:

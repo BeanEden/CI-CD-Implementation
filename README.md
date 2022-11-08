@@ -75,3 +75,133 @@ Utilisation de PowerShell, comme ci-dessus sauf :
 
 - Pour activer l'environnement virtuel, `.\venv\Scripts\Activate.ps1` 
 - Remplacer `which <my-command>` par `(Get-Command <my-command>).Path`
+
+## Déploiement
+
+Les variables suivantes de l'environnement sont à définir dans un fichier `oc-lettings-site/.env`.
+
+Variables :
+- DEBUG
+- SECRET_KEY
+- ALLOWED_HOSTS
+- SENTRY_DSN
+
+Ces variables sont utilisées dans le fichier `oc-lettings-site/settings.py`. 
+Un fichier `.env` d'exemple est ici fourni.
+
+### Applications et comptes nécessaires :
+
+Au cours de l'utilisation du pipeline, des comptes sont requis pour les applications suivantes:
+- [Github](https://github.com/signup)
+- [DockerHub](https://hub.docker.com/signup)
+- [CircleCi](https://circleci.com/signup/)
+- [Heroku](https://signup.heroku.com/)
+- [Sentry](https://sentry.io/signup/)
+
+### Fonctionnement du Pipeline
+
+Le pipeline utilise CircleCI.
+Il est configuré dans le fichier `.circleci/config.yml`
+
+Deux types de commits sont considérés :
+- 1- déploiement sur une autre branche que main (développement)
+- 2- déploiement sur la branche `main` (production)
+###
+#### 1- Commit de développement :
+workflow : `dev-other-branches-compilation-and-tests`
+
+usage : 
+- compile l'application
+- réalise les tests (via `pytest`)
+- check le linting (via `flake8`)
+
+###
+#### 2- Commit de production (branche main) :
+
+workflow : `prod-commit-to-main-branch`
+
+usage :
+- 1- compilation et tests:
+  - compile l'application
+  - réalise les tests (via `pytest`)
+  - check le linting (via `flake8`)
+  
+
+- 2- push Docker
+  - build l'image `docker` 
+  - tag et push 
+  - 2 push 
+    - un avec tag du hash pour récupération du commit 
+    - un pour la dernière version
+  
+
+- 3- déploie heroku
+  - installe
+  - déploie via git
+
+Chaque étape requiert que la précédente soit réussie.
+
+---
+## Applications :
+
+---
+### Github (Repository):
+
+Le repository [BeanEden/P13_2](https://github.com/BeanEden/P13_2) est la base du versioning de l'application.
+
+---
+
+### Docker Hub (Conteneur):
+
+Le [Docker-Hub](https://hub.docker.com/repository/docker/beaneden/oc-lettings) stocke en ligne l'image docker de l'application.  
+
+La commande unique pour récupération de l'application en local et son démarrage immédiat est
+Il est possible de démarrer l'application en local via la commande unique suivante :
+
+`docker run --pull always -p 8000:8000 --name P13 beaneden/oc-lettings:lastest`
+
+- `-p 8000:8000` défini l port utilisé
+- `--name P13` est le nom donné au conteneur créé 
+- `beaneden/oc-lettings` est le nom de l'image dans le repository en ligne 
+- `:lastest` défini la version de l'image utilisée. Ici, la dernière. Il peut être remplacé par le hash du commit souhaité.
+
+---
+### CircleCi (Pipeline):
+
+#### 1 - Mettez en place votre projet sur CircleCI
+
+Liez votre git et lancez un nouveau projet avec le code de l'application.
+
+#### 2 - Variables d'environnement
+Il est nécessaire d'inclure au projet des variables d'environnement.
+
+- Une fois sur la page de votre projet, cliquez sur `Project Settings` (en haut à droite).
+- Sélectionnez `Environment Variables`  
+- Cliquez `Add Environment Variables`  
+
+|   Nom des Variables  |   Description   |   Valeurs à renseigner   |
+|---    |---   |---    |
+|   DOCKERHUB_LOGIN   |   User Docker Hub   |   `beaneden`   |
+|   DOCKERHUB_PASSWORD   |   Token Dockerhub ou Mdp   |   `1321654654654651231654`   |
+|   HEROKU_API_KEY |  API Token Heroku  |   `1321654654654651231654`   |
+|   HEROKU_APP_NAME | nom de l'application | oc-lettings-124 |
+
+---
+
+## Heroku (Hébergement):
+[L'application](https://oc-lettings-124.herokuapp.com/) est hébergée sur Heroku.
+
+En cas de nécessité ou en cas de suppression, il faut créer l'application 'oc-lettings-124'.
+
+L'application gère Heroku :
+- Django : via `django_on_heroku` 
+- CircleCi : via [l'orb Heroku](https://circleci.com/developer/orbs/orb/circleci/heroku)
+
+---
+
+## Sentry (Monitoring):
+
+[Le monitoring de l'application](https://sentry.io/organizations/bean-7m/projects/oc-lettings/?project=4504122861486080) est géré par Sentry.
+
+Elle permet également de détecter des éventuels bug/issues.
+La variable `SENTRY_DSN` est requise pour l'utilisation de Sentry.
