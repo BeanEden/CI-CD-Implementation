@@ -22,7 +22,7 @@ workflows:
       - deploy-docker:
           requires:
             - build-and-test
-            -
+
 #      - heroku/deploy-via-git:
       - deploy-heroku:
           requires:
