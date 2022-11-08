@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'lettings_app',
+    'lettings_app2',
     'profiles_app',
     'oc_lettings_app'
 ]
