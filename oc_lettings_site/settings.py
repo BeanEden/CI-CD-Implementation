@@ -1,6 +1,6 @@
 import os
 
-import django_on_heroku
+
 import environ
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -21,7 +21,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = env('ALLOWED_HOSTS')
+ALLOWED_HOSTS = [env('ALLOWED_HOSTS')]
 
 
 # Application definition
@@ -138,4 +138,3 @@ sentry_sdk.init(
     traces_sample_rate=1.0
 )
 
-django_on_heroku.settings(locals())

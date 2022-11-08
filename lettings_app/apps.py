@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class LettingConfig(AppConfig):
-    name = 'letting'
+    name = 'lettings_app'
