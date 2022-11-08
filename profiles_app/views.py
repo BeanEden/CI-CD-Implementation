@@ -18,6 +18,6 @@ def index(request):
 # it. Nam aliquam dignissim congue.
 # Pellentesque habitant morbi tristique senectus et netus et males
 def profile(request, username):
-    profile = Profile.objects.get(user__username='toto')
+    profile = Profile.objects.get(user__username=username)
     context = {'profile': profile}
     return render(request, 'profiles_app/profile.html', context)
