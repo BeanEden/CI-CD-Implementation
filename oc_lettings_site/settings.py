@@ -1,4 +1,6 @@
 import os
+
+import django_on_heroku
 import environ
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -135,3 +137,5 @@ sentry_sdk.init(
     # We recommend adjusting this value in production.
     traces_sample_rate=1.0
 )
+
+django_on_heroku.settings(locals())
