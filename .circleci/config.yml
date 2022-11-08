@@ -112,11 +112,7 @@ jobs:
 
   deploy-heroku:
     executor: heroku/default
-      steps:
-          - checkout
-          - heroku/install
-          - run:
-            name: Deploying heroku
-            command:
-              - heroku/deploy-via-git
-
+    steps:
+      - checkout
+      - heroku/install
+      - heroku/deploy-via-git
