@@ -55,6 +55,11 @@ jobs:
             pip install --upgrade pip
             pip install -r requirements.txt
       - run:
+          name: Setup Db
+          command:|
+            python manage.py makemigrations
+            python manage.py migrate
+      - run:
           name: Run tests with pytest
           command: pytest
       - run:
