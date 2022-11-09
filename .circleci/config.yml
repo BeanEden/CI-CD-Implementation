@@ -88,3 +88,6 @@ jobs:
       - checkout
       - heroku/install
       - heroku/deploy-via-git
+      - run:
+        name: load database
+        command: python manage.py migrate
