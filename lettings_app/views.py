@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Letting
+from oc_lettings_site.settings import BASE_DIR, DATABASES
 
 
 # Create your views here.
@@ -10,7 +11,8 @@ from .models import Letting
 def index(request):
     lettings_list = Letting.objects.all()
     context = {'lettings_list': lettings_list}
-
+    print(BASE_DIR)
+    print(DATABASES)
     return render(request, 'lettings_app/index.html', context)
 
 
