@@ -158,7 +158,7 @@ Le [Docker-Hub](https://hub.docker.com/repository/docker/beaneden/oc-lettings) s
 La commande unique pour récupération de l'application en local et son démarrage immédiat est
 Il est possible de démarrer l'application en local via la commande unique suivante :
 
-`docker run --pull always -p 8000:8000 --name P13_3 beaneden/oc-lettings:lastest`
+`docker run --pull always -p 8000:8000 --name P13 beaneden/oc-lettings:lastest`
 
 - `-p 8000:8000` défini l port utilisé
 - `--name P13` est le nom donné au conteneur créé 
