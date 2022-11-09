@@ -193,6 +193,7 @@ Il est nécessaire d'inclure au projet des variables d'environnement.
 
 En cas de nécessité ou en cas de suppression, il faut créer l'application 'oc-lettings-124'.
 
+
 L'application gère Heroku :
 - Django : via `django_on_heroku` 
 - CircleCi : via [l'orb Heroku](https://circleci.com/developer/orbs/orb/circleci/heroku)
