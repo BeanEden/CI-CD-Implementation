@@ -11,4 +11,4 @@ from django.shortcuts import render
 # pellentesque iaculis enim cursus in. Praesent volutpat porttitor magna,
 # non finibus neque cursus id.
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'oc_lettings_app/index.html')
