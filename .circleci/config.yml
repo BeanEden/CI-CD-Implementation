@@ -87,8 +87,4 @@ jobs:
     steps:
       - checkout
       - heroku/install
-      - heroku/deploy-via-git:
-          - post-steps:
-              - run :
-                  name : set up data
-                  command: python manage.py migrate
+      - heroku/deploy-via-git
