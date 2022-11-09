@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'oc_lettings_site.urls'
@@ -122,13 +123,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static_dir/'
+STATIC_URL = '/static/'
+STATIC_TMP = os.path.join(BASE_DIR, 'static')
+
+os.makedirs(STATIC_TMP, exist_ok=True)
+os.makedirs(STATIC_ROOT, exist_ok=True)
 
 # Extra places for collectstatic to find static_dir files.
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 sentry_sdk.init(
     dsn=env('SENTRY_DSN'),
