@@ -78,68 +78,36 @@ Utilisation de PowerShell, comme ci-dessus sauf :
 
 ## Déploiement
 
-Les variables suivantes de l'environnement sont à définir dans un fichier `oc-lettings-site/.env`.
-
-Variables :
-- DEBUG
-- SECRET_KEY
-- ALLOWED_HOSTS
-- SENTRY_DSN
-
+Les variables de l'environnement sont à définir dans un fichier `oc-lettings-site/.env`.
 Ces variables sont utilisées dans le fichier `oc-lettings-site/settings.py`. 
-Un fichier `.env` d'exemple est ici fourni.
+
+Un fichier `.env.example` est ici fourni.
 
 ### Applications et comptes nécessaires :
 
-Au cours de l'utilisation du pipeline, des comptes sont requis pour les applications suivantes:
+Au cours de l'utilisation de la pipeline, des comptes sont requis pour les applications suivantes:
 - [Github](https://github.com/signup)
 - [DockerHub](https://hub.docker.com/signup)
 - [CircleCi](https://circleci.com/signup/)
 - [Heroku](https://signup.heroku.com/)
 - [Sentry](https://sentry.io/signup/)
 
-### Fonctionnement du Pipeline
+### Fonctionnement de la Pipeline
 
-Le pipeline utilise CircleCI.
+La pipeline utilise CircleCI.
 Il est configuré dans le fichier `.circleci/config.yml`
 
 Deux types de commits sont considérés :
 - 1- déploiement sur une autre branche que main (développement)
+  - compilation, tests, linting
+  
+
 - 2- déploiement sur la branche `main` (production)
-###
-#### 1- Commit de développement :
-workflow : `dev-other-branches-compilation-and-tests`
-
-usage : 
-- compile l'application
-- réalise les tests (via `pytest`)
-- check le linting (via `flake8`)
-
-###
-#### 2- Commit de production (branche main) :
-
-workflow : `prod-commit-to-main-branch`
-
-usage :
-- 1- compilation et tests:
-  - compile l'application
-  - réalise les tests (via `pytest`)
-  - check le linting (via `flake8`)
+  - compilation, tests, linting
+  - déploiement docker
+  - déploiement heroku
   
-
-- 2- push Docker
-  - build l'image `docker` 
-  - tag et push 
-  - 2 push 
-    - un avec tag du hash pour récupération du commit 
-    - un pour la dernière version
-  
-
-- 3- déploie heroku
-  - installe
-  - déploie via git
-
-Chaque étape requiert que la précédente soit réussie.
+Pour la branche main, chaque étape requiert que la précédente soit réussie.
 
 ---
 ## Applications :
@@ -175,7 +143,8 @@ Liez votre git et lancez un nouveau projet avec le code de l'application.
 #### 2 - Variables d'environnement
 Il est nécessaire d'inclure au projet des variables d'environnement.
 
-- Une fois sur la page de votre projet, cliquez sur `Project Settings` (en haut à droite).
+- Une fois sur la page de votre projet, cliquez sur `Project Settings`.
+![alt text](C:\opc finis\P13_2\pwp p13\Prject_settings_location.png)
 - Sélectionnez `Environment Variables`  
 - Cliquez `Add Environment Variables`  
 
@@ -190,11 +159,14 @@ Il est nécessaire d'inclure au projet des variables d'environnement.
 
 ## Heroku (Hébergement):
 [L'application](https://oc-lettings-124.herokuapp.com/) est hébergée sur Heroku.
+![alt text](C:\opc finis\P13_2\pwp p13\heroku.png)
 
-En cas de nécessité ou en cas de suppression, il faut créer l'application 'oc-lettings-124'.
+En cas de suppression:
+  - créer l'application 'oc-lettings-124' :`heroku create oc-lettings-124`
+  - trigger la pipeline de la branche `main` sur circleci.
+  - si la base de donnée sqlite n'est pas correctement lue : `heroku addons:remove heroku-postgresql`
 
-
-L'application gère Heroku :
+L'application gère Heroku de la manière suivante :
 - Django : via `django_on_heroku` 
 - CircleCi : via [l'orb Heroku](https://circleci.com/developer/orbs/orb/circleci/heroku)
 
@@ -203,6 +175,9 @@ L'application gère Heroku :
 ## Sentry (Monitoring):
 
 [Le monitoring de l'application](https://sentry.io/organizations/bean-7m/projects/oc-lettings/?project=4504122861486080) est géré par Sentry.
+![alt text](C:\opc finis\P13_2\pwp p13\sentry 2.png)
 
 Elle permet également de détecter des éventuels bug/issues.
+![alt text](C:\opc finis\P13_2\pwp p13\sentry issues.png)
+
 La variable `SENTRY_DSN` est requise pour l'utilisation de Sentry.
