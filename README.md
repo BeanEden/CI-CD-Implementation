@@ -1,8 +1,9 @@
-## Résumé
+## Orange County Lettings (P13 OCR)
 
-Site web d'Orange County Lettings
+Site web d'Orange County Lettings, start-up américaine spécialisée dans l'immobilier.
+Le site gère les lettings, leurs adresses ainsi que les profils de la société.
 
-## Développement local
+## Déploiement local
 
 ### Prérequis
 
@@ -15,12 +16,12 @@ Dans le reste de la documentation sur le développement local, il est supposé q
 
 ### macOS / Linux
 
-#### Cloner le repository
+#### 1- Cloner le repository
 
 - `cd /path/to/put/project/in`
 - `git clone https://github.com/OpenClassrooms-Student-Center/Python-OC-Lettings-FR.git`
 
-#### Créer l'environnement virtuel
+#### 2- Créer l'environnement virtuel
 
 - `cd /path/to/Python-OC-Lettings-FR`
 - `python -m venv venv`
@@ -32,7 +33,7 @@ Dans le reste de la documentation sur le développement local, il est supposé q
 - Confirmer que la commande `pip` exécute l'exécutable pip dans l'environnement virtuel, `which pip`
 - Pour désactiver l'environnement, `deactivate`
 
-#### Exécuter le site
+#### 3- Exécuter le site
 
 - `cd /path/to/Python-OC-Lettings-FR`
 - `source venv/bin/activate`
@@ -41,20 +42,29 @@ Dans le reste de la documentation sur le développement local, il est supposé q
 - Aller sur `http://localhost:8000` dans un navigateur.
 - Confirmer que le site fonctionne et qu'il est possible de naviguer (vous devriez voir plusieurs profils et locations).
 
-#### Linting
 
+## Linting et tests unitaires
+#### Linting
+Le package flake8 est ici utilisé pour le linting du site.
+
+Pour lancer le package, utilisez les commandes suivantes :
 - `cd /path/to/Python-OC-Lettings-FR`
 - `source venv/bin/activate`
 - `flake8`
 
 #### Tests unitaires
+Le package pytest est ici utilisé pour lancer les tests de l'application.
 
+Pour lancer le package, utilisez les commandes suivantes :
 - `cd /path/to/Python-OC-Lettings-FR`
 - `source venv/bin/activate`
 - `pytest`
 
-#### Base de données
 
+## Base de données et administration
+#### Base de données
+La base de données utilisée est la base sqlite de Django.
+Il est possible d'y accéder de la manière suivante :
 - `cd /path/to/Python-OC-Lettings-FR`
 - Ouvrir une session shell `sqlite3`
 - Se connecter à la base de données `.open oc-lettings-site.sqlite3`
@@ -65,7 +75,7 @@ Dans le reste de la documentation sur le développement local, il est supposé q
 - `.quit` pour quitter
 
 #### Panel d'administration
-
+La version admin du site est accessible de la manière suivante :
 - Aller sur `http://localhost:8000/admin`
 - Connectez-vous avec l'utilisateur `admin`, mot de passe `Abc1234!`
 
